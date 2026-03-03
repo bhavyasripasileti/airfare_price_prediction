@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 from datetime import datetime, time
+import time as t
 
 # Load model
 model = joblib.load("flight_model.pkl")
 
-st.set_page_config(page_title="Flight Price Prediction", layout="wide")
+st.set_page_config(page_title="AI Flight Fare Estimator", layout="wide")
 
 st.title("✈️ AI Flight Fare Estimator")
 
@@ -36,7 +37,7 @@ journey_date = st.sidebar.date_input("Journey Date")
 
 departure_time_input = st.sidebar.time_input("Departure Time", value=time(9, 0))
 
-# Convert real time into model category
+# Convert time into category
 hour = departure_time_input.hour
 
 if 5 <= hour < 12:
@@ -60,11 +61,15 @@ else:
 
     if st.sidebar.button("Search Flights"):
 
-        # Dynamic duration logic
+        # Animation
+        with st.spinner("🔎 Searching best fares for you..."):
+            t.sleep(1.5)
+
+        # Dynamic duration
         base_duration = 1.5 if source_city != destination_city else 1.0
         estimated_duration = base_duration + (stops * 0.8)
 
-        # Prepare model input
+        # Prepare input
         input_data = pd.DataFrame([[
             airline,
             source_city,
@@ -89,7 +94,7 @@ else:
 
         prediction = model.predict(input_data)[0]
 
-        # Fare category logic
+        # Fare category
         if prediction < 4000:
             category = "🟢 Budget Deal"
         elif prediction < 8000:
@@ -97,16 +102,44 @@ else:
         else:
             category = "🔴 Expensive Fare"
 
-        # Layout
-        col1, col2 = st.columns(2)
+        st.markdown("---")
 
-        with col1:
-            st.success(f"💰 Estimated Ticket Price: ₹{prediction:,.0f}")
-            st.markdown(f"### {category}")
+        # Premium Flight Card
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+        ">
 
-        with col2:
-            st.info(f"⏱ Estimated Flight Duration: {estimated_duration:.1f} hours")
-            st.write(f"📅 Days Left: {days_left}")
+            <h2>🛫 {airline}</h2>
+
+            <h3>{source_city} ➜ {destination_city}</h3>
+
+            <p style="font-size:18px;">
+                📅 {journey_date} <br>
+                🕒 Departure: {departure_time_input} <br>
+                💺 {travel_class} Class <br>
+                🧳 Stops: {stops}
+            </p>
+
+            <h1 style="margin-top:20px;">
+                💰 ₹ {prediction:,.0f}
+            </h1>
+
+            <p style="font-size:18px;">
+                ⏱ Duration: {estimated_duration:.1f} hours <br>
+                📆 Days Left: {days_left}
+            </p>
+
+            <h3>{category}</h3>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("")
 
         # Booking suggestion
         if days_left <= 5:
