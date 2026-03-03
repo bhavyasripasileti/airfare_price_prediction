@@ -4,7 +4,7 @@ import joblib
 from datetime import datetime, time
 import time as t
 
-# Load model
+# Load trained model
 model = joblib.load("flight_model.pkl")
 
 st.set_page_config(page_title="AI Flight Fare Estimator", layout="wide")
@@ -13,21 +13,27 @@ st.title("✈️ AI Flight Fare Estimator")
 
 st.sidebar.header("Search Flights")
 
-# Inputs
-airline = st.sidebar.selectbox("Airline", [
-    "SpiceJet", "AirAsia", "Vistara",
-    "GO_FIRST", "Indigo", "Air India"
-])
 
-source_city = st.sidebar.selectbox("From", [
-    "Delhi", "Mumbai", "Bangalore",
-    "Kolkata", "Hyderabad", "Chennai"
-])
+# Sidebar Inputs
 
-destination_city = st.sidebar.selectbox("To", [
-    "Delhi", "Mumbai", "Bangalore",
-    "Kolkata", "Hyderabad", "Chennai"
-])
+
+airline = st.sidebar.selectbox(
+    "Airline",
+    ["SpiceJet", "AirAsia", "Vistara",
+     "GO_FIRST", "Indigo", "Air India"]
+)
+
+source_city = st.sidebar.selectbox(
+    "From",
+    ["Delhi", "Mumbai", "Bangalore",
+     "Kolkata", "Hyderabad", "Chennai"]
+)
+
+destination_city = st.sidebar.selectbox(
+    "To",
+    ["Delhi", "Mumbai", "Bangalore",
+     "Kolkata", "Hyderabad", "Chennai"]
+)
 
 travel_class = st.sidebar.selectbox("Class", ["Economy", "Business"])
 
@@ -35,9 +41,13 @@ stops = st.sidebar.selectbox("Stops", [0, 1, 2])
 
 journey_date = st.sidebar.date_input("Journey Date")
 
-departure_time_input = st.sidebar.time_input("Departure Time", value=time(9, 0))
+departure_time_input = st.sidebar.time_input(
+    "Departure Time", value=time(9, 0)
+)
 
-# Convert time into category
+# Time Category Conversion
+
+
 hour = departure_time_input.hour
 
 if 5 <= hour < 12:
@@ -51,7 +61,8 @@ else:
 
 arrival_time = "Evening"
 
-# Calculate days_left
+# Days Left Calculation
+
 today = datetime.today().date()
 days_left = (journey_date - today).days
 
@@ -61,15 +72,18 @@ else:
 
     if st.sidebar.button("Search Flights"):
 
-        # Animation
+        # Search Animation
+        
         with st.spinner("🔎 Searching best fares for you..."):
             t.sleep(1.5)
-
-        # Dynamic duration
+            
+        # Dynamic Duration Logic
+     
         base_duration = 1.5 if source_city != destination_city else 1.0
         estimated_duration = base_duration + (stops * 0.8)
 
-        # Prepare input
+        # Prepare Model Input
+        
         input_data = pd.DataFrame([[
             airline,
             source_city,
@@ -94,7 +108,8 @@ else:
 
         prediction = model.predict(input_data)[0]
 
-        # Fare category
+        # Fare Category
+        
         if prediction < 4000:
             category = "🟢 Budget Deal"
         elif prediction < 8000:
@@ -104,43 +119,49 @@ else:
 
         st.markdown("---")
 
-flight_card = f"""
-<div style="
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    padding: 30px;
-    border-radius: 20px;
-    color: white;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
-">
+        
+        # Premium Flight Card UI
+        
+        flight_card = f"""
+        <div style="
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+        ">
 
-    <h2>🛫 {airline}</h2>
+            <h2>🛫 {airline}</h2>
 
-    <h3>{source_city} ➜ {destination_city}</h3>
+            <h3>{source_city} ➜ {destination_city}</h3>
 
-    <p style="font-size:18px;">
-        📅 {journey_date} <br>
-        🕒 Departure: {departure_time_input} <br>
-        💺 {travel_class} Class <br>
-        🧳 Stops: {stops}
-    </p>
+            <p style="font-size:18px;">
+                📅 {journey_date} <br>
+                🕒 Departure: {departure_time_input} <br>
+                💺 {travel_class} Class <br>
+                🧳 Stops: {stops}
+            </p>
 
-    <h1 style="margin-top:20px;">
-        💰 ₹ {prediction:,.0f}
-    </h1>
+            <h1 style="margin-top:20px;">
+                💰 ₹ {prediction:,.0f}
+            </h1>
 
-    <p style="font-size:18px;">
-        ⏱ Duration: {estimated_duration:.1f} hours <br>
-        📆 Days Left: {days_left}
-    </p>
+            <p style="font-size:18px;">
+                ⏱ Duration: {estimated_duration:.1f} hours <br>
+                📆 Days Left: {days_left}
+            </p>
 
-    <h3>{category}</h3>
+            <h3>{category}</h3>
 
-</div>
-"""
+        </div>
+        """
 
-st.markdown(flight_card, unsafe_allow_html=True)
+        st.markdown(flight_card, unsafe_allow_html=True)
 
-        # Booking suggestion
+        st.markdown("")
+
+        # Booking Suggestion Logic
+        
         if days_left <= 5:
             st.warning("⚠️ Prices may increase soon. Consider booking now!")
         elif days_left <= 15:
