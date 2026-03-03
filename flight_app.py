@@ -117,47 +117,44 @@ else:
         else:
             category = "🔴 Expensive Fare"
 
+        
         st.markdown("---")
 
-        
         # Premium Flight Card UI
         
-        flight_card = f"""
-        <div style="
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            padding: 30px;
-            border-radius: 20px;
-            color: white;
-            box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
-        ">
-
-            <h2>🛫 {airline}</h2>
-
-            <h3>{source_city} ➜ {destination_city}</h3>
-
-            <p style="font-size:18px;">
-                📅 {journey_date} <br>
-                🕒 Departure: {departure_time_input} <br>
-                💺 {travel_class} Class <br>
-                🧳 Stops: {stops}
-            </p>
-
-            <h1 style="margin-top:20px;">
-                💰 ₹ {prediction:,.0f}
-            </h1>
-
-            <p style="font-size:18px;">
-                ⏱ Duration: {estimated_duration:.1f} hours <br>
-                📆 Days Left: {days_left}
-            </p>
-
-            <h3>{category}</h3>
-
-        </div>
-        """
-
-        st.markdown(flight_card, unsafe_allow_html=True)
-
+        with st.container():
+            col1, col2 = st.columns([2, 1])
+        
+            with col1:
+                st.subheader(f"🛫 {airline}")
+                st.markdown(f"### {source_city} ➜ {destination_city}")
+                st.write(f"📅 {journey_date}")
+                st.write(f"🕒 Departure: {departure_time_input}")
+                st.write(f"💺 {travel_class} Class")
+                st.write(f"🧳 Stops: {stops}")
+        
+            with col2:
+                st.metric("💰 Estimated Price", f"₹ {prediction:,.0f}")
+                st.metric("⏱ Duration", f"{estimated_duration:.1f} hrs")
+                st.metric("📆 Days Left", f"{days_left}")
+        
+        st.markdown("")
+        
+        # Fare Category Display
+        if prediction < 4000:
+            st.success("🟢 Budget Deal")
+        elif prediction < 8000:
+            st.info("🟡 Standard Fare")
+        else:
+            st.error("🔴 Expensive Fare")
+        
+        # Booking Suggestion
+        if days_left <= 5:
+            st.warning("⚠️ Prices may increase soon. Consider booking now!")
+        elif days_left <= 15:
+            st.info("📈 Fares are moderately priced. Monitor for deals.")
+        else:
+            st.success("🎯 Good time to monitor fares.")
         st.markdown("")
 
         # Booking Suggestion Logic
