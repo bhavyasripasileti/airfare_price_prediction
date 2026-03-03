@@ -104,42 +104,41 @@ else:
 
         st.markdown("---")
 
-        # Premium Flight Card
-        st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            padding: 30px;
-            border-radius: 20px;
-            color: white;
-            box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
-        ">
+flight_card = f"""
+<div style="
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    padding: 30px;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+">
 
-            <h2>🛫 {airline}</h2>
+    <h2>🛫 {airline}</h2>
 
-            <h3>{source_city} ➜ {destination_city}</h3>
+    <h3>{source_city} ➜ {destination_city}</h3>
 
-            <p style="font-size:18px;">
-                📅 {journey_date} <br>
-                🕒 Departure: {departure_time_input} <br>
-                💺 {travel_class} Class <br>
-                🧳 Stops: {stops}
-            </p>
+    <p style="font-size:18px;">
+        📅 {journey_date} <br>
+        🕒 Departure: {departure_time_input} <br>
+        💺 {travel_class} Class <br>
+        🧳 Stops: {stops}
+    </p>
 
-            <h1 style="margin-top:20px;">
-                💰 ₹ {prediction:,.0f}
-            </h1>
+    <h1 style="margin-top:20px;">
+        💰 ₹ {prediction:,.0f}
+    </h1>
 
-            <p style="font-size:18px;">
-                ⏱ Duration: {estimated_duration:.1f} hours <br>
-                📆 Days Left: {days_left}
-            </p>
+    <p style="font-size:18px;">
+        ⏱ Duration: {estimated_duration:.1f} hours <br>
+        📆 Days Left: {days_left}
+    </p>
 
-            <h3>{category}</h3>
+    <h3>{category}</h3>
 
-        </div>
-        """, unsafe_allow_html=True)
+</div>
+"""
 
-        st.markdown("")
+st.markdown(flight_card, unsafe_allow_html=True)
 
         # Booking suggestion
         if days_left <= 5:
