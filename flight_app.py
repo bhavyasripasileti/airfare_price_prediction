@@ -157,11 +157,3 @@ else:
             st.success("🎯 Good time to monitor fares.")
         st.markdown("")
 
-        # Booking Suggestion Logic
-        
-        if days_left <= 5:
-            st.warning("⚠️ Prices may increase soon. Consider booking now!")
-        elif days_left <= 15:
-            st.info("📈 Fares are moderately priced. Monitor for deals.")
-        else:
-            st.success("🎯 Good time to monitor fares.")
