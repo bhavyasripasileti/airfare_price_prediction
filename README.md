@@ -1,136 +1,217 @@
 # ✈️ AI Flight Fare Estimator
-
-An interactive Machine Learning web application that predicts flight ticket prices based on user inputs such as airline, route, date, class, and number of stops.
-
-Built using **Python, Scikit-Learn, and Streamlit**, this project demonstrates an end-to-end ML workflow from model training to deployment.
+### Predict flight ticket prices with machine learning — instantly.
+---
+> An end-to-end Machine Learning web application that predicts flight ticket prices based on airline, route, travel class, stops, and journey date — powered by a Random Forest model trained on 300K+ records.
 
 ---
 
-## 🚀 Live Features
+## 🌐 Live App
 
-- 📅 Journey date selection (auto days-left calculation)
-- 🕒 Departure time selection (mapped to time categories)
-- 🛫 Airline selection
-- 📍 Source & Destination selection
-- 💺 Travel class selection
-- 🧳 Stops selection
-- 💰 Real-time price prediction
-- ⏱ Estimated flight duration display
-- 🎯 Fare classification (Budget / Standard / Expensive)
-- 📈 Booking recommendation logic
+> 🔗 **[Click here to try the app live »](https://airfarepriceprediction-dyer4xmpnetfacacncmzkm.streamlit.app)**
+
+---
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Machine Learning Details](#-machine-learning-details)
+- [Project Architecture](#️-project-architecture)
+- [How It Works](#️-how-it-works)
+- [Tech Stack](#️-tech-stack)
+- [Getting Started](#-getting-started)
+- [Deployment](#-deployment)
+- [Roadmap](#-roadmap)
+- [Author](#-author)
+
+---
+
+## 🔍 Overview
+
+The **AI Flight Fare Estimator** is a full-stack machine learning application that enables users to predict flight ticket prices in real time. Simply enter your flight preferences — and the app instantly returns an estimated fare, duration, fare category, and smart booking recommendation.
+
+This project demonstrates a **complete ML workflow**: data preprocessing → model training → pipeline construction → serialization → web deployment.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 📅 **Date-Aware Prediction** | Auto-calculates days left until departure |
+| 🕒 **Time-of-Day Mapping** | Maps departure times to Morning / Afternoon / Evening / Night |
+| 🛫 **Airline Selection** | Supports multiple airline options |
+| 📍 **Route Selection** | Source & destination city picker |
+| 💺 **Class & Stops** | Economy / Business + number of stops |
+| 💰 **Real-Time Pricing** | Instant fare prediction on user inputs |
+| ⏱ **Duration Estimate** | Estimated flight duration display |
+| 🎯 **Fare Classification** | Labels fares as Budget / Standard / Expensive |
+| 📈 **Booking Recommendation** | Smart logic to advise the best time to book |
 
 ---
 
 ## 🧠 Machine Learning Details
 
-- **Dataset:** Clean Flight Price Dataset (300K+ records)
-- **Model Used:** Random Forest Regressor
-- **Pipeline:**  
-  - OneHotEncoding for categorical features  
-  - Numerical feature passthrough  
-  - Scikit-learn Pipeline integration  
-- **Model Performance:**  
-  - R² Score ≈ **0.97**
+```
+Dataset      →  Clean Flight Price Dataset  (300,000+ records)
+Algorithm    →  Random Forest Regressor
+R² Score     →  ≈ 0.97  (97% variance explained)
+```
+
+### Pipeline Architecture
+
+```
+Raw Input Features
+        │
+        ▼
+┌───────────────────────────┐
+│   Scikit-learn Pipeline   │
+│  ┌─────────────────────┐  │
+│  │ OneHotEncoder        │  │  ← Categorical: Airline, Source, Destination, Class
+│  ├─────────────────────┤  │
+│  │ Passthrough          │  │  ← Numerical: Days Left, Stops, Duration
+│  └─────────────────────┘  │
+└───────────┬───────────────┘
+            │
+            ▼
+   Random Forest Regressor
+            │
+            ▼
+     Predicted Fare (₹)
+```
+
+### Model Performance
+
+| Metric | Value |
+|---|---|
+| R² Score | **0.97** |
+| Training Records | **300,000+** |
+| Encoding | OneHotEncoding |
+| Serialization | Joblib (`.pkl`) |
 
 ---
 
-## 🏗 Project Architecture
+## 🏗️ Project Architecture
 
 ```
 airfare_price_prediction/
 │
-├── flight_app.py          # Streamlit web app
-├── flight_model.pkl       # Trained ML model
-├── train_model.py         # Model training script
-├── requirements.txt       # Dependencies
-└── README.md              # Project documentation
+├── flight_app.py          # 🖥  Streamlit web application (UI + prediction logic)
+├── flight_model.pkl       # 🤖  Serialized trained ML pipeline
+├── train_model.py         # 🏋  Model training & evaluation script
+├── requirements.txt       # 📦  Project dependencies
+└── README.md              # 📄  Project documentation
 ```
 
 ---
 
 ## ⚙️ How It Works
 
-1. User selects flight details.
-2. System calculates:
-   - Days left until departure
-   - Time category (Morning/Afternoon/Evening/Night)
-   - Estimated duration
-3. Model predicts ticket price.
-4. App displays:
-   - Estimated price
-   - Duration
-   - Fare category
-   - Booking recommendation
+```
+Step 1 — User Input
+  └─ Selects airline, source, destination, class, stops, and journey date
+
+Step 2 — Feature Engineering
+  ├─ Calculates days left until departure
+  ├─ Maps departure time → time category (Morning / Afternoon / Evening / Night)
+  └─ Estimates flight duration based on route
+
+Step 3 — Model Inference
+  └─ Pre-trained Random Forest pipeline generates fare prediction
+
+Step 4 — Results Display
+  ├─ 💰 Estimated ticket price
+  ├─ ⏱  Estimated flight duration
+  ├─ 🎯 Fare category (Budget / Standard / Expensive)
+  └─ 📈 Booking recommendation
+```
 
 ---
 
-## 🛠 Technologies Used
+## 🛠️ Tech Stack
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Streamlit
-- Joblib
+| Category | Technology |
+|---|---|
+| Language | Python 3.9+ |
+| ML Framework | Scikit-learn |
+| Data Processing | Pandas, NumPy |
+| Web Framework | Streamlit |
+| Model Serialization | Joblib |
+| Deployment | Streamlit Cloud |
 
 ---
 
-## ▶️ Run Locally
+## 🚀 Getting Started
 
-1. Clone the repository:
+### Prerequisites
 
+- Python 3.9 or higher
+- pip package manager
+
+### Installation
+
+**1. Clone the repository**
 ```bash
 git clone https://github.com/your-username/airfare_price_prediction.git
 cd airfare_price_prediction
 ```
 
-2. Install dependencies:
+**2. (Optional) Create a virtual environment**
+```bash
+python -m venv venv
+source venv/bin/activate        # macOS / Linux
+venv\Scripts\activate           # Windows
+```
 
+**3. Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the app:
-
+**4. Run the application**
 ```bash
 streamlit run flight_app.py
 ```
 
----
-
-## 🌐 Deployment
-
-This project is deployed using **Streamlit Cloud** for live web access.
+The app will open automatically at `http://localhost:8501`.
 
 ---
 
-## 🎯 Key Highlights
+## 🌍 Deployment
 
-- End-to-end ML pipeline implementation
-- Production-style model saving & loading
-- Clean interactive UI
-- Real-time predictions
-- Business logic integration
-- Git version control workflow
+This project is deployed on **Streamlit Cloud** for live public access.
+
+To deploy your own instance:
+
+1. Push the repository to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Connect your GitHub repository
+4. Set the main file path to `flight_app.py`
+5. Click **Deploy**
+
+> ⚡ No server management required — Streamlit Cloud handles everything.
 
 ---
 
-## 📌 Future Improvements
+## 🗺 Roadmap
 
-- 📈 Price trend visualization
-- 🏆 Multi-airline comparison
-- 📊 Feature importance visualization
-- 🎨 Enhanced UI styling
-- 🔍 Model explainability (SHAP)
+- [ ] 📈 Price trend visualization over time
+- [ ] 🏆 Multi-airline side-by-side comparison
+- [ ] 📊 Feature importance visualization (SHAP values)
+- [ ] 🎨 Enhanced UI with custom theming
+- [ ] 🔍 Model explainability dashboard
 
 ---
 
 ## 👩‍💻 Author
 
-Bhavya Sri Pasileti  
-B.Tech | Data Science & AI Enthusiast  
-Passionate about building intelligent ML systems and deploying real-world applications.
+**Bhavya Sri Pasileti**
+
+> B.Tech | Data Science & AI Enthusiast
+> Passionate about building intelligent ML systems and deploying real-world applications.
+
+[![LinkedIn](https://www.linkedin.com/in/bhavya-sri-pasileti-16565a2a1)
 
 ---
 
-⭐ If you like this project, feel free to star the repository!
+**If this project helped you or you found it interesting, please consider giving it a ⭐ — it means a lot!**
