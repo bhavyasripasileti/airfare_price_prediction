@@ -210,7 +210,7 @@ To deploy your own instance:
 > B.Tech | Data Science & AI Enthusiast
 > Passionate about building intelligent ML systems and deploying real-world applications.
 
-[![LinkedIn](https://www.linkedin.com/in/bhavya-sri-pasileti-16565a2a1)
+[LinkedIn](https://www.linkedin.com/in/bhavya-sri-pasileti-16565a2a1)
 
 ---
 
